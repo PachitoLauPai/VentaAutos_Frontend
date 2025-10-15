@@ -1,0 +1,148 @@
+/* ===== Fondo animado tipo página principal ===== */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: radial-gradient(circle at center, #02386e 0%, #000814 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+.login-container::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    from 0deg,
+    rgba(0, 102, 204, 0.8),
+    rgba(0, 0, 51, 0.1),
+    rgba(0, 102, 204, 0.8)
+  );
+  animation: spin 15s linear infinite;
+  filter: blur(50px) brightness(1.2);
+  z-index: 0;
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* ===== Card de login estilo glassmorphism ===== */
+.login-card {
+  position: relative;
+  z-index: 1;
+  background: rgba(10, 24, 54, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  color: #ffffff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.5);
+}
+
+.login-card h2 {
+  margin-bottom: 30px;
+  color: #00bfff;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* ===== Formulario ===== */
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 12px;
+  font-size: 16px;
+  box-sizing: border-box;
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+input::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+input:focus {
+  outline: none;
+  border-color: #00bfff;
+  box-shadow: 0 0 8px rgba(0,191,255,0.5);
+}
+
+/* ===== Botones ===== */
+.btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn-primary {
+  background-color: #00bfff;
+  color: #fff;
+  box-shadow: 0 5px 15px rgba(0,191,255,0.3);
+}
+
+.btn-primary:hover {
+  background-color: #0099cc;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,191,255,0.4);
+}
+
+.btn-outline {
+  background: none;
+  border: 2px solid #00bfff;
+  color: #00bfff;
+}
+
+.btn-outline:hover {
+  background-color: #00bfff;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* ===== Mensajes de error ===== */
+.error-message {
+  color: #ff6b6b;
+  margin-top: 15px;
+  padding: 10px;
+  background-color: rgba(255,107,107,0.2);
+  border-radius: 8px;
+  font-size: 14px;
+}
+

@@ -1,0 +1,132 @@
+<div class="container">
+
+  <!-- HEADER CON LOGO CENTRADO -->
+  <header class="main-header">
+    <div class="logo">
+      <img src="/logo.png" alt="Logo">
+    </div>
+  </header>
+
+  <!-- BOTÓN FUERA DEL HEADER, ARRIBA A LA DERECHA -->
+  <div class="header-right">
+    <button *ngIf="authService.isLoggedIn()" class="btn btn-warning" (click)="logout()">
+      🔒 Cerrar Sesión
+    </button>
+    <button *ngIf="!authService.isLoggedIn()" class="btn btn-primary" routerLink="/login">
+      🔑 Iniciar Sesión
+    </button>
+  </div>
+
+  <!-- NAVBAR DE SECCIONES Y BUSCADOR -->
+  <nav class="navbar" [class.scrolled]="isScrolled">
+    <div class="navbar-left">
+      <button class="menu-btn" (click)="toggleMenu()">
+        ☰ <span class="menu-label">Secciones</span>
+      </button>
+
+ <div class="menu-box" [class.open]="isMenuOpen">
+  <ul>
+    <li><a href="#">Autos más vendidos</a></li>
+    <li><a href="#">En tendencia</a></li>
+    <li><a href="#">Ofertas especiales</a></li>
+    <li><a href="#">Nuevos lanzamientos</a></li>
+  </ul>
+</div>
+
+    </div>
+
+    <div class="navbar-right">
+      <div class="search-container">
+        <input type="text" placeholder="Buscar..." />
+        <span class="search-icon">🔍</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- INFO DE USUARIO Y BOTONES ADMIN -->
+  <nav class="nav">
+    <div class="user-info" *ngIf="authService.isLoggedIn()">
+      <span class="welcome">Hola, {{ authService.getCurrentUser()?.nombre }}</span>
+      <span class="user-role admin" *ngIf="authService.isAdmin()">👑 Administrador</span>
+      <span class="user-role cliente" *ngIf="!authService.isAdmin()">👤 Cliente</span>
+    </div>
+    
+    <div class="nav-actions">
+      <!-- Botones solo para admin -->
+      <div *ngIf="authService.isAdmin()" class="admin-actions">
+        <button class="btn btn-success" routerLink="/admin/autos/nuevo">
+          + Agregar Auto
+        </button>
+        <button class="btn btn-info" routerLink="/admin/usuarios">
+          👥 Gestionar Usuarios
+        </button>
+        <button class="btn btn-info" routerLink="/registro">
+          👥 Registrar Usuario
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MENSAJES DE CARGA / ERROR -->
+  <div *ngIf="loading" class="loading">Cargando autos...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <!-- GRID DE AUTOS -->
+  <div *ngIf="!loading && !error" class="autos-grid">
+    <div *ngFor="let auto of autos" class="auto-card">
+      
+      <!-- CARRUSEL DE IMÁGENES -->
+      <div class="image-carousel">
+        <div class="main-image">
+          <img [src]="getCurrentImage(auto)" 
+               [alt]="auto.marca + ' ' + auto.modelo"
+               (error)="onImageError($event, auto)">
+        </div>
+        
+        <div *ngIf="auto.imagenes && auto.imagenes.length > 1" class="thumbnails">
+          <div *ngFor="let img of auto.imagenes; let i = index" 
+               class="thumbnail" 
+               [class.active]="i === getCurrentImageIndex(auto)"
+               (click)="setCurrentImage(auto, i)">
+            <img [src]="img" [alt]="'Miniatura ' + (i + 1)">
+          </div>
+        </div>
+        
+        <div *ngIf="auto.imagenes && auto.imagenes.length > 1" class="carousel-controls">
+          <button class="carousel-btn prev" (click)="prevImage(auto)">‹</button>
+          <span class="image-counter">{{ getCurrentImageIndex(auto) + 1 }} / {{ auto.imagenes.length }}</span>
+          <button class="carousel-btn next" (click)="nextImage(auto)">›</button>
+        </div>
+      </div>
+      
+      <!-- INFORMACIÓN DEL AUTO -->
+      <div class="auto-info">
+        <h3>{{ auto.marca }} {{ auto.modelo }}</h3>
+        <p class="anio">{{ auto.anio }}</p>
+        <p class="precio">${{ auto.precio.toLocaleString() }}</p>
+        
+        <div class="detalles">
+          <span class="badge">{{ auto.color }}</span>
+          <span class="badge">{{ auto.combustible }}</span>
+          <span class="badge">{{ auto.transmision }}</span>
+        </div>
+        
+        <p class="descripcion">{{ auto.descripcion }}</p>
+        
+        <div class="estado" [class.disponible]="auto.disponible" [class.no-disponible]="!auto.disponible">
+          {{ auto.disponible ? 'Disponible' : 'Vendido' }}
+        </div>
+
+        <div class="auto-actions" *ngIf="authService.isAdmin()">
+          <button class="btn btn-warning btn-sm" (click)="editarAuto(auto)">
+            ✏️ Editar
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="eliminarAuto(auto)">
+            🗑️ Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
